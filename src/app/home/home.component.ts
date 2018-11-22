@@ -45,7 +45,10 @@ export class HomeComponent {
 
   constructor(private oauthService: OAuthService,
               private oktaAuthWrapper: OktaAuthWrapper) {
+                const claims = this.oauthService.getIdentityClaims();
+                console.log('infos=',claims);
   }
+  
 
   loginWithPassword() {
     this.oktaAuthWrapper.login(this.username, this.password)
@@ -61,6 +64,9 @@ export class HomeComponent {
   }
 
   get givenName() {
+    if (!this.oauthService.hasValidAccessToken()) {
+      return null;
+    }
     const claims = this.oauthService.getIdentityClaims();
     if (!claims) {
       return null;
